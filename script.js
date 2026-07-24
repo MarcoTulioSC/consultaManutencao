@@ -5,6 +5,26 @@ let buscaTravada = false; // true depois de pesquisar, até clicar "Limpar"
 
 
 
+
+
+function buscarJSONP(url){
+
+  return new Promise((resolve, reject) => {
+    const nome = 'cb_' + Date.now();
+    const script = document.createElement('script');
+    script.src = url + '&callback=' + nome;
+    window[nome] = (data) => {
+      resolve(data);
+      delete window[nome];
+      script.remove();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+
+}
+
+
 // VALIDAÇÃO DE INPUT — só números
 // ════════════════════════════════════════════════════════════
 // Remove qualquer caractere que não seja dígito.
@@ -162,8 +182,7 @@ function mostrarErro(mensagem){
 
 async function Pesquisar(event) {
 
- const API_URL = 'https://script.google.com/macros/s/AKfycbzsS7i4cNbX0uJiuP8bG1SYApBGfaOXNnpqX1NU_zFkdbfRvlSVQ5KP0fa0YRH1DEIZ2Q/exec'; // URL gerado pelo apps script
-
+ 
 
 
   if(buscaTravada) return; //proteção extra ????
@@ -222,9 +241,8 @@ async function Pesquisar(event) {
   // 3. Chama a API (Apps Script) COLOCAR O LINK DA PLANILHA SHEETS AQUI
 
   try {
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyiySPkxhQA-iFnmrhkBw4yvQg2wodJlyjiz67VsY6ABSBSxxY1HEkB0nZLRn_8NIlC1g/exec'; // ←
-    const res = await fetch(`${API_URL}?${params.toString()}`);
-    const data = await res.json();
+    const API_URL = 'https://script.google.com/macros/s/AKfycby0JBf1iCEASGw0-HijLUSpzlb75sZdQQlNvzTl4C7fNiNAt4iXUrPczgSp_QCjGERMjw/exec'; // ← url do sheets gerado pelo apps script
+    const data = await buscarJSONP(`${API_URL}?${params.toString()}`);
     renderResultados(data);
   } catch (e) {   //MODO TESTE, QUANDO ESTIVER TUDO PRONTO, REMOVE AQUI
     mostrarErro('Erro ao buscar dados. Tente novamente mais tarde.');
