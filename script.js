@@ -162,7 +162,7 @@ function mostrarErro(mensagem){
 
 async function Pesquisar(event) {
 
- // const API_URL = 'https://script.google.com/macros/s/AKfycbzxzbkkxHGP7NP36ZnswxBmtBxQ2_rTEFU3l6X3IBPY4ARiVCh2b2AlHw-MOCfKLeGxFA/exec'; // URL gerado pelo apps script
+ const API_URL = 'https://script.google.com/macros/s/AKfycbzsS7i4cNbX0uJiuP8bG1SYApBGfaOXNnpqX1NU_zFkdbfRvlSVQ5KP0fa0YRH1DEIZ2Q/exec'; // URL gerado pelo apps script
 
 
 
