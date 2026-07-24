@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Solicitação de Reparo(SR) - Manutenção</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700
+              &family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css"> 
+    
+</head>
+
+
+<body>
+
+ 
+  <!-- ① CABEÇALHO -->
+  <header>
+    <div class="logo-pill">🕐 Atendimentos e Reparos</div>
+    <h1>Consulta de Solicitações de Reparo</h1>
+    <p class="subtitle">Verifique o status do seu carro abaixo</p>
+    <p class="instructions">Digite o número do carro, código SR ou sua matrícula para consultar o andamento do veículo.</p>
+  </header>
+
+
+
+  <!-- ② CARD DE BUSCA -->
+  <div class="search-card" id="search-card">
+
+    <!-- Seletor de modo -->
+    <div class="filter-tabs">
+      <button class="tab-btn active" data-tab="carro" onclick="trocarAba(this)">🚌 Nº do Carro</button>
+      <button class="tab-btn"        data-tab="sr"    onclick="trocarAba(this)">🔢 Código SR</button>
+      <button class="tab-btn"        data-tab="matricula" onclick="trocarAba(this)">📋 Matrícula</button>
+    </div>
+
+
+
+    <!-- Painel: busca por carro (visível por padrão) -->
+    <div id="tab-carro" class = "tab-panel visible">
+
+      <div class="input-row">
+      <div class = "input-group">
+      <label for="input-carro">
+        Número do carro
+      </label>
+      <div class = "input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17h18M5 17V9a2 2 0 012-2h10a2 2 0 012 2v8M7 17v2M17 17v2M5 9l1.5-4h11L19 9"/></svg>
+
+      <input id="input-carro" placeholder="Exemplo: 444" inputmode="numeric" maxlength="3"
+              oninput="apenasNumeros(this,3); onInputChange('input-carro','btn-carro')"
+              onkeydown="onEnterKey(event,'btn-carro')"
+              onfocus="this.parentElement.classList.add('focused')"
+              onblur="this.parentElement.classList.remove('focused')">
+    </div>
+    </div>
+      <button class="btn-pesquisar" id="btn-carro" disabled onclick="Pesquisar(event)">
+       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+       <span class="btn-label">Pesquisar</span>
+       <span class="btn-spinner"></span>        
+      </button>
+      <button class="btn-limpar" onclick="limparBusca()">Limpar</button>
+    </div>
+  </div>
+
+
+  <!-- Painel: busca por SR (oculto) -->
+    <div id="tab-sr" class="tab-panel">
+      <div class="input-row">
+        <div class="input-group">
+          <label>Código da SR</label>
+          <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h2M14 8h2M8 14h2M14 14h2"/></svg>
+          <input id="input-sr" placeholder="Ex: 990126" inputmode="numeric"
+                  oninput="apenasNumeros(this); onInputChange('input-sr','btn-sr')"
+                  onkeydown="onEnterKey(event,'btn-sr')"
+                  onfocus="this.parentElement.classList.add('focused')"
+                  onblur="this.parentElement.classList.remove('focused')">
+          </div>
+        </div>
+        <button class="btn-pesquisar" id="btn-sr" disabled onclick="Pesquisar(event)">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+           <span class="btn-label">Pesquisar</span>
+
+
+           <span class="btn-spinner"></span>
+        </button>
+        <button class="btn-limpar" onclick="limparBusca()">Limpar</button>
+      </div>
+    </div>
+
+
+
+    <!-- Painel: busca por situação (oculto) -->
+    <div id="tab-matricula" class="tab-panel">
+      <div class="input-row">
+        <div class="input-group">
+          <label>Matrícula do motorista</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <input id="input-matricula" placeholder="Digite sua matrícula" inputmode="numeric"
+                   oninput="apenasNumeros(this); onInputChange('input-matricula','btn-matricula')"
+                   onkeydown="onEnterKey(event,'btn-matricula')"
+                   onfocus="this.parentElement.classList.add('focused')"
+                   onblur="this.parentElement.classList.remove('focused')"> 
+          </div>
+        </div>
+        <button class="btn-pesquisar" id="btn-matricula" disabled onclick="Pesquisar(event)">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+           <span class="btn-label">Pesquisar</span>
+           <span class="btn-spinner"></span>
+        </button>
+        <button class="btn-limpar" onclick="limparBusca()">Limpar</button>
+      </div>
+      
+
+    </div>
+  </div>
+
+
+ 
+
+
+  <!-- ③ RESULTADOS (vazio, preenchido pelo JS) -->
+  <div id="resultados"></div>
+
+  <!----
+    <button
+id="btnDashboard"
+class="btn-pesquisar"
+onclick="abrirDashboard()">
+
+📊 Abrir Dashboard
+
+</button>
+-->
+
+
+  <!--<div id="dashboardPowerBI" class="dashboard">
+        <h2>📊 Dashboard do veículo</h2>
+
+        <iframe
+            src="LINK DO POWER BII(JÁ PUBLICADO)"
+            width = "100%"
+            height = "700"
+            frameborder = "0"
+            allowfullscreen = "true"
+        </iframe>
+  </div>
+  -->
+
+</div>
+
+<!-- LOADING -->
+<div id="loading-overlay" class="loading-overlay">
+    <div class="loading-content">
+
+        <div class="loading-road">
+            <div class="loading-bus-big">🚌</div>
+        </div>
+
+        <p class="loading-text">
+            Consultando informações, aguarde...
+        </p>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+
+
+</html>
